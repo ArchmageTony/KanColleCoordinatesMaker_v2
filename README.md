@@ -16,7 +16,7 @@ GitHub项目地址：[https://github.com/ArchmageTony/KanColleCoordinatesMaker_v
 ## 三、解析数据(api_start2)准备
 本程序可以解析从getData返回`api_start2`数据的`UTF-8`编码方式的TXT或者JSON文件，也可以解析Tibowl大佬解析整理过的`start2.json`和`api_mst_shipgraph.json`文件（[项目地址](https://github.com/Tibowl/api_start2  )）。  
 下面将会讲述如何获取到`api_start2`数据文件  
-- 1、自行下载getData数据：以chrome为例，按`F12`打开开发者工具，选择`Network`标签，打开舰娘并选择`GAME START`进入游戏，在开发者工具里面搜索`getData`，单击下面的`getData`，在右侧选择`Response`标签卡，将里面的内容全部复制下来，保存成`UTF-8`格式的TXT或JSON即可。  
+- 1、自行下载getData数据：以chrome为例，按`F12`打开开发者工具，选择`Network`标签，打开舰娘游戏并点击`GAME START`进入游戏，进入到主港后，在开发者工具里面搜索`getData`，单击下面的`getData`，在右侧选择`Response`标签卡，将里面的内容全部复制下来，保存成`UTF-8`格式的TXT或JSON即可。  
 ![image](https://www.crowsong.xyz/wp-content/uploads/2020/04/2020080709371744.png )  
 - 2、从Tibowl大佬那里下载整理过的`start2.json`文件：先访问[https://github.com/Tibowl/api_start2](https://github.com/Tibowl/api_start2  )，单击`start2.json`之后在右上角找到`Download`即可，若你点击后没有进入下载而是仅仅进入到了文本当中，直接右键另存为即可。  
 ![image](https://www.crowsong.xyz/wp-content/uploads/2020/04/2020080709414383.png )  
