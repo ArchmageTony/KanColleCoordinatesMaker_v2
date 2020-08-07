@@ -1,6 +1,6 @@
 # 舰娘立绘坐标文件生成器 v2  
 v1版本为`a5566123s`所制作：[NGA帖子地址](https://bbs.nga.cn/read.php?tid=13252143&rand=442) [GitHub项目地址](https://github.com/a5566123s/KanColleCoordinatesMaker)  
-本程序功能与v1版本相同，均为通过解析api_start2数据生成用户指定的立绘坐标数据文件（.config.ini）。由于游戏二期对数据格式的修改导致v1版本的程序无法正常工作，故重新制作了这个程序。  
+本程序功能与v1版本相同，均为通过解析**官方api_start2数据**生成用户指定的立绘文件坐标数据文件（.config.ini）。主要作用为保存节日限定立绘的相应的坐标，方便之后通过魔改可在非限定时期继续使用限定立绘（本程序仅能保存坐标不能保存立绘）。由于游戏二期对数据格式的修改导致v1版本的程序无法正常工作，故重新制作了这个程序。  
 ***
 ## 一、运行环境  
 本软件需要java11以上版本才可以运行，请前往[Oracle官网](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html "点击此处跳转") 下载。  
