@@ -11,7 +11,7 @@ GitHub项目地址：[https://github.com/ArchmageTony/KanColleCoordinatesMaker_v
 **解压密码：crowsong.xyz**  
 你可以直接从[release](https://github.com/ArchmageTony/KanColleCoordinatesMaker_v2/releases )页面下载程序`KanColleCoordinatesMaker_v2.jar`与运行环境`KCCM Runtime.rar`。  
 诚通网盘下载方式 **（解压密码：crowsong.xyz）**：  
-- 程序：[KanColleCoordinatesMaker_v2.jar（诚通网盘）](https://t00y.com/file/2276132-456385405 "解压密码：crowsong.xyz")  
+- 程序：[KanColleCoordinatesMaker_v2.jar（诚通网盘）](https://t00y.com/file/2276132-456564664 "解压密码：crowsong.xyz")  
 - 运行环境：[KCCM Runtime.rar（诚通网盘）](https://t00y.com/file/2276132-456384453 "解压密码：crowsong.xyz")  
 
 ## 三、解析数据(api_start2)准备
