@@ -142,8 +142,8 @@ public class AppInit {
         checkBoxes[13] = new JCheckBox("战斗中 （battle_d）", setting.isApi_battle_d());
         checkBoxes[14] = new JCheckBox("结婚戒指 位置a （weda）", setting.isApi_weda());
         checkBoxes[15] = new JCheckBox("结婚戒指 位置b （wedb）", setting.isApi_wedb());
-        checkBoxes[16] = new JCheckBox("特殊攻击 （pa）", setting.isApi_pa());
-        checkBoxes[17] = new JCheckBox("特殊攻击 b （pab）", setting.isApi_pab());
+        checkBoxes[16] = new JCheckBox("昼战特殊攻击 （pa）", setting.isApi_pa());
+        checkBoxes[17] = new JCheckBox("夜战特殊攻击 （pab）", setting.isApi_pab());
         nBtn.addActionListener(e -> {
             for (int i = 0; i < 14; i++) {
                 checkBoxes[i].setSelected(0 == i % 2);
