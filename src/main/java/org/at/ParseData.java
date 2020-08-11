@@ -9,6 +9,7 @@ import org.at.entity.ShipGraph;
 import org.at.tool.MyLog;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -27,13 +28,15 @@ public class ParseData {
      * @return 解析是否成功的消息与解析后的角色立绘（ShipGraph）对象的集合
      */
     public ArrayList<ShipGraph> parseAPI(File parseFile) {
-        FileInputStream is = null;
+        FileInputStream fis = null;
+        InputStreamReader isr = null;
         BufferedReader bf = null;
         String sg;//使用gson转换时的字符串内容，应该为api_mst_shipgraph字段的全部数组内容
         StringBuilder content;
         try {
-            is = new FileInputStream(parseFile);
-            bf = new BufferedReader(new InputStreamReader(is));
+            fis = new FileInputStream(parseFile);
+            isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
+            bf = new BufferedReader(isr);
             content = new StringBuilder();
             String str;
             while (null != (str = bf.readLine())) {
@@ -47,8 +50,11 @@ public class ParseData {
             return null;
         } finally {
             try {
-                if (is != null) {
-                    is.close();
+                if (fis != null) {
+                    fis.close();
+                }
+                if (isr != null) {
+                    isr.close();
                 }
                 if (bf != null) {
                     bf.close();
