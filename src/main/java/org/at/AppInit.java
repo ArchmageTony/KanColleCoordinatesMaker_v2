@@ -24,7 +24,7 @@ import java.util.Enumeration;
 public class AppInit {
 
     private final JFrame jf = new JFrame("KanColle Coordinates Maker v2 by ArchmageTony");
-    private final Setting setting = new Setting("", true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true);
+    private final Setting setting = new Setting("", "FileName", true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true);
     private JTextField fileEdtTxt, keywordEdtTxt;
 
     /**
@@ -56,11 +56,16 @@ public class AppInit {
         JPanel keywordP = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel keywordBtnP = new JPanel();
         JScrollPane logP;
+        JRadioButton findTypeRdoBtn1 = new JRadioButton("FileName", setting.getFindType().equals("FileName"));
+        JRadioButton findTypeRdoBtn2 = new JRadioButton("ID", setting.getFindType().equals("ID"));
+        ButtonGroup findTypeBG = new ButtonGroup();
         fileEdtTxt = new JTextField(95);
         keywordEdtTxt = new JTextField(55);
         JButton fileBtn = new JButton("选择API文件");
         JButton settingBtn = new JButton("输出文件设置");
         JButton keywordBtn = new JButton("生成坐标文件");
+        findTypeBG.add(findTypeRdoBtn1);
+        findTypeBG.add(findTypeRdoBtn2);
         fileEdtTxt.setText(setting.getApiPath());
         MyLog.logEdtTxt.setEditable(false);
         MyLog.logEdtTxt.setPreferredSize(new Dimension(30, 300));
@@ -70,7 +75,11 @@ public class AppInit {
         fileP.add(new JLabel("API文件地址："));
         fileP.add(fileEdtTxt);
         fileBtnP.add(fileBtn);
-        keywordP.add(new JLabel("输入立绘名称，多个以英文逗号隔开："));
+//        keywordP.add(new JLabel("输入立绘名称，多个以英文逗号隔开："));
+        keywordP.add(new JLabel("按"));
+        keywordP.add(findTypeRdoBtn1);
+        keywordP.add(findTypeRdoBtn2);
+        keywordP.add(new JLabel("查找，多个英文逗号隔开"));
         keywordP.add(keywordEdtTxt);
         keywordP.add(settingBtn);
         keywordBtnP.add(keywordBtn);
@@ -233,6 +242,20 @@ public class AppInit {
             while (null != (line = br.readLine())) {
                 content = line.split("=");
                 switch (content[0]) {
+                    /*
+
+
+
+
+
+
+
+
+
+
+
+
+                     */
                     case "APIFilePath":
                         if (1 != content.length) {
                             setting.setApiPath(content[1]);

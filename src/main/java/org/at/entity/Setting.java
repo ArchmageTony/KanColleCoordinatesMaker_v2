@@ -7,7 +7,8 @@ package org.at.entity;
  */
 
 public class Setting {
-    private String apiPath;
+    private String apiPath;//api文件地址
+    private String findType;//查找立绘方式 1：按照名称查找  2：按照ID查找
     private boolean api_boko_n;
     private boolean api_boko_d;
     private boolean api_kaisyu_n;
@@ -26,8 +27,9 @@ public class Setting {
     private boolean api_pa;
     private boolean api_pab;
 
-    public Setting(String apiPath, boolean api_boko_n, boolean api_boko_d, boolean api_kaisyu_n, boolean api_kaisyu_d, boolean api_kaizo_n, boolean api_kaizo_d, boolean api_map_n, boolean api_map_d, boolean api_ensyuf_n, boolean api_ensyuf_d, boolean api_ensyue_n, boolean api_battle_n, boolean api_battle_d, boolean api_weda, boolean api_wedb, boolean api_pa, boolean api_pab) {
+    public Setting(String apiPath, String findType, boolean api_boko_n, boolean api_boko_d, boolean api_kaisyu_n, boolean api_kaisyu_d, boolean api_kaizo_n, boolean api_kaizo_d, boolean api_map_n, boolean api_map_d, boolean api_ensyuf_n, boolean api_ensyuf_d, boolean api_ensyue_n, boolean api_battle_n, boolean api_battle_d, boolean api_weda, boolean api_wedb, boolean api_pa, boolean api_pab) {
         this.apiPath = apiPath;
+        this.findType = findType;
         this.api_boko_n = api_boko_n;
         this.api_boko_d = api_boko_d;
         this.api_kaisyu_n = api_kaisyu_n;
@@ -51,6 +53,7 @@ public class Setting {
     public String toString() {
         return "Setting{" +
                 "apiPath='" + apiPath + '\'' +
+                ", findType='" + findType + '\'' +
                 ", api_boko_n=" + api_boko_n +
                 ", api_boko_d=" + api_boko_d +
                 ", api_kaisyu_n=" + api_kaisyu_n +
@@ -69,6 +72,14 @@ public class Setting {
                 ", api_pa=" + api_pa +
                 ", api_pab=" + api_pab +
                 '}';
+    }
+
+    public String getFindType() {
+        return findType;
+    }
+
+    public void setFindType(String findType) {
+        this.findType = findType;
     }
 
     public boolean isApi_pa() {
