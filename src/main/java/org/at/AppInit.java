@@ -179,6 +179,8 @@ public class AppInit {
         gbc.gridwidth = 3;
         gb.setConstraints(logP, gbc);
         jf.add(logP);
+        Image jfIcon = Toolkit.getDefaultToolkit().createImage(App.class.getResource("/icon.png"));
+        jf.setIconImage(jfIcon);
         jf.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -195,8 +197,8 @@ public class AppInit {
      * 输出文件设置窗口
      */
     private void outSettingPanel() {
-        final JFrame settingJF = new JFrame("输出文件设置");
-        settingJF.setLayout(new GridLayout(0, 2, 4, 4));
+        JDialog settingJD = new JDialog(jf, "输出文件设置", true);
+        settingJD.setLayout(new GridLayout(0, 2, 4, 4));
         JCheckBox[] checkBoxes = new JCheckBox[18];
         JButton nBtn = new JButton("仅普通");
         JButton dBtn = new JButton("仅中破");
@@ -233,8 +235,7 @@ public class AppInit {
             checkBoxes[11].setSelected(false);
         });
         allBtn.addActionListener(e -> {
-            for (JCheckBox checkBox :
-                    checkBoxes) {
+            for (JCheckBox checkBox : checkBoxes) {
                 checkBox.setSelected(true);
             }
             checkBoxes[11].setSelected(false);
@@ -257,34 +258,29 @@ public class AppInit {
             setting.setApi_wedb(checkBoxes[15].isSelected());
             setting.setApi_pa(checkBoxes[16].isSelected());
             setting.setApi_pab(checkBoxes[17].isSelected());
-            settingJF.dispose();
+            settingJD.dispose();
         });
-        settingJF.add(new JLabel("通常立绘"));
-        settingJF.add(new JLabel("中破立绘"));
+        settingJD.add(new JLabel("通常立绘"));
+        settingJD.add(new JLabel("中破立绘"));
         for (int i = 0; i < 14; i++) {
-            settingJF.add(checkBoxes[i]);
+            settingJD.add(checkBoxes[i]);
         }
-        settingJF.add(new JLabel());
-        settingJF.add(new JLabel());
+        settingJD.add(new JLabel());
+        settingJD.add(new JLabel());
         for (int i = 14; i < 18; i++) {
-            settingJF.add(checkBoxes[i]);
+            settingJD.add(checkBoxes[i]);
         }
-        settingJF.add(new JLabel());
-        settingJF.add(new JLabel());
-        settingJF.add(nBtn);
-        settingJF.add(dBtn);
-        settingJF.add(allBtn);
-        settingJF.add(saveBtn);
-        settingJF.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                settingJF.dispose();
-            }
-        });
-        settingJF.setResizable(false);
-        settingJF.pack();
-        settingJF.setLocationRelativeTo(jf);
-        settingJF.setVisible(true);
+        settingJD.add(new JLabel());
+        settingJD.add(new JLabel());
+        settingJD.add(nBtn);
+        settingJD.add(dBtn);
+        settingJD.add(allBtn);
+        settingJD.add(saveBtn);
+        settingJD.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        settingJD.setResizable(false);
+        settingJD.pack();
+        settingJD.setLocationRelativeTo(jf);
+        settingJD.setVisible(true);
     }
 
     /**
