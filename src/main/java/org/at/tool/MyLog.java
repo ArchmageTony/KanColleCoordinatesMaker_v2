@@ -18,9 +18,11 @@ public class MyLog {
     static SimpleAttributeSet boldSet = new SimpleAttributeSet();
 
     static {
+        StyleConstants.setFontSize(infoSet, 14);
+        StyleConstants.setFontSize(errorSet, 14);
         StyleConstants.setForeground(errorSet, Color.RED);
         StyleConstants.setBold(boldSet, true);
-        StyleConstants.setFontSize(boldSet, 14);
+        StyleConstants.setFontSize(boldSet, 16);
     }
 
     public static void log(String content) {
@@ -44,6 +46,9 @@ public class MyLog {
                     break;
                 case "BOLD":
                     doc.insertString(doc.getLength(), content + "\n\n", boldSet);
+                    break;
+                case "SPLIT":
+                    doc.insertString(doc.getLength(), "-".repeat(MyLog.logEdtTxt.getWidth() / 10) + "\n\n", boldSet);
                     break;
             }
         } catch (BadLocationException e) {
@@ -72,24 +77,4 @@ public class MyLog {
             e.printStackTrace();
         }
     }
-
-  /*  public final static JTextArea logEdtTxt = new JTextArea(20, 50);
-
-    public static void log(String content) {
-        logEdtTxt.append(content+"\r\n");
-    }
-
-    public static void log(Component c, String content, String messageType) {
-        logEdtTxt.append(content+"\r\n");
-        switch (messageType) {
-            case "ERROR":
-                JOptionPane.showMessageDialog(c, content, "ERROR", JOptionPane.ERROR_MESSAGE);
-                break;
-            case "INFORMATION":
-                JOptionPane.showMessageDialog(c, content, "INFORMATION", JOptionPane.INFORMATION_MESSAGE);
-                break;
-            default:
-                break;
-        }
-    }*/
 }

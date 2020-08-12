@@ -18,6 +18,8 @@ import java.util.ArrayList;
  */
 public class FindOutData {
 
+    private Setting setting;
+
     /**
      * 查找与其相符的角色立绘坐标
      *
@@ -26,43 +28,101 @@ public class FindOutData {
      * @param setting    设置参数，用来判断用户选择了哪些立绘坐标信息需要输出
      */
     public void find(String[] keywords, ArrayList<ShipGraph> shipGraphs, Setting setting) {
+        this.setting = setting;
         int success = 0;
         int fail = 0;
         boolean findResult;
+        if (0 == keywords.length) {
+            return;
+        }
         for (String keyword : keywords) {
             findResult = false;
-            if (keyword.equals("")) {
+            if (!keywordCheck(keyword)) {
+                MyLog.log("查找失败：" + setting.getFindType() + "： " + keyword + " 输入内容不合法，请检查拼写。", "ERROR");
+                fail++;
                 continue;
             }
             for (ShipGraph shipGraph : shipGraphs) {
-                if (shipGraph.getApi_filename().equals(keyword)) {
-                    findResult = true;
-                    if (out(shipGraph, setting).equals("成功")) {
-                        success++;
-                    } else {
-                        fail++;
-                    }
+                switch (setting.getFindType()) {
+                    case "FileNameF":
+                        if (shipGraph.getApi_filename().substring(0, 10).equals(keyword.substring(0, 10))) {
+                            findResult = true;
+                            if (out(shipGraph).equals("成功")) {
+                                success++;
+                            } else {
+                                fail++;
+                            }
+                        }
+                        break;
+                    case "FileNameE":
+                        if (shipGraph.getApi_filename().equals(keyword)) {
+                            findResult = true;
+                            if (out(shipGraph).equals("成功")) {
+                                success++;
+                            } else {
+                                fail++;
+                            }
+                        }
+                        break;
+                    case "ID":
+                        if (shipGraph.getApi_id() == Integer.parseInt(keyword)) {
+                            findResult = true;
+                            if (out(shipGraph).equals("成功")) {
+                                success++;
+                            } else {
+                                fail++;
+                            }
+                        }
+                        break;
                 }
             }
             if (!findResult) {
                 fail++;
-                MyLog.log("查找失败：立绘 " + keyword + " 未查找到，请检查拼写。", "ERROR");
+                MyLog.log("查找失败：" + setting.getFindType() + "： " + keyword + " 未查找到，请检查拼写。", "ERROR");
             }
         }
-        MyLog.log("生成坐标文件完成：请检查程序所在目录的 output 文件夹", "BOLD");
-        MyLog.log("成功文件数：" + success + "    失败文件数：" + fail, "BOLD");
-        //        MyLog.log("-------------------------------------------------------------------------------------------------------", "BOLD");
-        MyLog.log("-".repeat(MyLog.logEdtTxt.getWidth() / 8), "BOLD");
+//        MyLog.log("生成坐标文件完成：请检查程序所在目录的 output 文件夹", "BOLD");
+        MyLog.log("成功：" + success + "    失败：" + fail + "    请检查程序所在目录的 output 文件夹", "BOLD");
+        MyLog.log("", "SPLIT");
+    }
+
+    /**
+     * 用于检测输入的内容是否合法，若不合法则不会查找直接跳过
+     *
+     * @param keyword 查找的内容
+     * @return 内容是否合法
+     */
+    private boolean keywordCheck(String keyword) {
+        if (keyword.equals("")) {
+            return false;
+        }
+        try {
+            if (setting.getFindType().equals("FileNameF")) {
+                String substring = keyword.substring(0, 10);
+            }
+            if (setting.getFindType().equals("FileNameE")) {
+                String substring = keyword.substring(0, 12);
+            }
+            if (setting.getFindType().equals("ID")) {
+                int i = Integer.parseInt(keyword);
+            }
+        } catch (Exception e) {
+            return false;
+        }
+/*        if (setting.getFindType().equals("ID")) {
+            Matcher mer = Pattern.compile("^[0-9]+$").matcher(keyword);
+            return mer.find();
+        }*/
+        return true;
     }
 
     /**
      * 将查找到的角色立绘数据信息输出到相应的文件当中
      *
      * @param shipGraph 查找到的角色立绘对象
-     * @param setting   设置参数，用来判断用户选择了哪些立绘坐标信息需要输出
      * @return 输出信息
      */
-    private String out(ShipGraph shipGraph, Setting setting) {
+    private String out(ShipGraph shipGraph) {
         FileOutputStream fos = null;
         OutputStreamWriter osw = null;
         File file;
@@ -71,7 +131,7 @@ public class FindOutData {
         boolean mkdir = filepath.mkdir();
         file = new File(App.USER_DIR + File.separator + "output" + File.separator + shipGraph.getApi_filename() + ".config.ini");
         if (file.exists()) {
-            MyLog.log("输出失败：文件 " + shipGraph.getApi_filename() + " 已经存在，无法创建。", "ERROR");
+            MyLog.log("输出失败：ID：" + shipGraph.getApi_id() + "  FileName：" + shipGraph.getApi_filename() + " 已经存在，无法创建。", "ERROR");
             return "失败";
         }
         try {
@@ -217,7 +277,7 @@ public class FindOutData {
                 e.printStackTrace();
             }
         }
-//        MyLog.log("输出成功：文件 " + shipGraph.getApi_filename() + " 已成功输出");
+        MyLog.log("输出成功：ID：" + shipGraph.getApi_id() + "  FileName：" + shipGraph.getApi_filename() + " 已成功输出");
         return "成功";
     }
 }

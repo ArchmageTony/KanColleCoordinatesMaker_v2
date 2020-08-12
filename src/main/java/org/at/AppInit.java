@@ -5,9 +5,13 @@ import org.at.entity.ShipGraph;
 import org.at.tool.MyLog;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.plaf.FontUIResource;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.*;
@@ -24,8 +28,9 @@ import java.util.Enumeration;
 public class AppInit {
 
     private final JFrame jf = new JFrame("KanColle Coordinates Maker v2 by ArchmageTony");
-    private final Setting setting = new Setting("", true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true);
+    private final Setting setting = new Setting("", "FileNameF", true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true);
     private JTextField fileEdtTxt, keywordEdtTxt;
+    private JRadioButton findTypeRdoBtn1, findTypeRdoBtn2, findTypeRdoBtn3;
 
     /**
      * 修改默认字体为黑体
@@ -55,30 +60,102 @@ public class AppInit {
         JPanel fileBtnP = new JPanel();
         JPanel keywordP = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel keywordBtnP = new JPanel();
+        JPanel findTypeP = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JScrollPane logP;
-        fileEdtTxt = new JTextField(95);
-        keywordEdtTxt = new JTextField(55);
+        findTypeRdoBtn1 = new JRadioButton("以'FileName'模糊查找", setting.getFindType().equals("FileNameF"));
+        findTypeRdoBtn2 = new JRadioButton("以'FileName'精确查找", setting.getFindType().equals("FileNameE"));
+        findTypeRdoBtn3 = new JRadioButton("以'ID'查找", setting.getFindType().equals("ID"));
+        ButtonGroup findTypeBG = new ButtonGroup();
+        fileEdtTxt = new JTextField(100);
+        keywordEdtTxt = new JTextField(65);
         JButton fileBtn = new JButton("选择API文件");
         JButton settingBtn = new JButton("输出文件设置");
         JButton keywordBtn = new JButton("生成坐标文件");
+        JLabel findTypeTv = new JLabel("<HTML><font color='blue'><U>(?)</U></font></HTML>");
+        ToolTipManager.sharedInstance().setDismissDelay(60000);//设置浮动提示信息的持续时间为1分钟
+        fileEdtTxt.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                if (!fileEdtTxt.getText().trim().equals("")) {
+                    setting.setApiPath(fileEdtTxt.getText());
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                if (!fileEdtTxt.getText().trim().equals("")) {
+                    setting.setApiPath(fileEdtTxt.getText());
+                }
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                if (!fileEdtTxt.getText().trim().equals("")) {
+                    setting.setApiPath(fileEdtTxt.getText());
+                }
+            }
+        });
+        findTypeTv.setToolTipText("点击问号查看详细解释");
+        findTypeTv.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                MyLog.log("以'FileName'模糊查找：仅仅匹配输入文件名的前10位，可以解决因为期间限定立绘将12位文件名的最后2位修改而查找不到的问题。" +
+                        "但输出出来的文件名还是以api_start2中的为准，不以输入的内容为准。在这种查找方式下你可以只输入前10位文件名即可。\n" +
+                        "以'FileName'精确查找：完全匹配12位文件名，若期间限定立绘文件名有所修改会提示查找失败。\n" +
+                        "以'ID'查找：可以解决期间限定立绘文件名不同的问题，输出的文件名以api_start2中的为准。\n\n" +
+                        "FileName：由英文字母组成的12位的字符串，你可以从acgpower的舰娘一览中的字符ID获取，或者从岛风go的战舰表中的语音路径获取。举例：schftfqkstha是朝潮改二丁万圣节期间的FileName。\n" +
+                        "ID：你可以从acgpower的舰娘一览中的ID获取，或者从岛风go的战舰表中的战舰ID获取。举例：468是朝潮改二丁的立绘ID。\n\n" +
+                        "角色的不同形态（未改，改，改二，等等）对应的FileName与ID均不相同，请注意区分。\n\n" +
+                        "期间限定立绘的FileName的最后2位可能会与普通立绘不同。举例：grmdtyheocuc是朝潮改二丁的普通立绘FileName，grmdtyheocha是朝潮改二丁万圣节期间的立绘FileName。"
+                );
+                MyLog.log("", "SPLIT");
+            }
+        });
+        findTypeRdoBtn1.setToolTipText("仅仅匹配输入文件名的前10位查找");
+        findTypeRdoBtn1.addItemListener(e -> {
+            if (findTypeRdoBtn1.isSelected()) {
+                setting.setFindType("FileNameF");
+            }
+        });
+        findTypeRdoBtn2.setToolTipText("精确匹配输入文件名查找");
+        findTypeRdoBtn2.addItemListener(e -> {
+            if (findTypeRdoBtn2.isSelected()) {
+                setting.setFindType("FileNameE");
+            }
+        });
+        findTypeRdoBtn3.setToolTipText("匹配ID查找");
+        findTypeRdoBtn3.addItemListener(e -> {
+            if (findTypeRdoBtn3.isSelected()) {
+                setting.setFindType("ID");
+            }
+        });
+        findTypeBG.add(findTypeRdoBtn1);
+        findTypeBG.add(findTypeRdoBtn2);
+        findTypeBG.add(findTypeRdoBtn3);
         fileEdtTxt.setText(setting.getApiPath());
         MyLog.logEdtTxt.setEditable(false);
-        MyLog.logEdtTxt.setPreferredSize(new Dimension(30, 300));
         fileBtn.addActionListener(e -> openFile());
         settingBtn.addActionListener(e -> outSettingPanel());
         keywordBtn.addActionListener(e -> find(keywordEdtTxt.getText(), fileEdtTxt.getText()));
         fileP.add(new JLabel("API文件地址："));
         fileP.add(fileEdtTxt);
         fileBtnP.add(fileBtn);
-        keywordP.add(new JLabel("输入立绘名称，多个以英文逗号隔开："));
+        keywordP.add(new JLabel("请输入内容，多个英文逗号隔开："));
         keywordP.add(keywordEdtTxt);
         keywordP.add(settingBtn);
         keywordBtnP.add(keywordBtn);
+        findTypeP.add(new JLabel("查找方式"));
+        findTypeP.add(findTypeTv);
+        findTypeP.add(new JLabel("："));
+        findTypeP.add(findTypeRdoBtn1);
+        findTypeP.add(findTypeRdoBtn2);
+        findTypeP.add(findTypeRdoBtn3);
         logP = new JScrollPane(MyLog.logEdtTxt);
+        logP.setPreferredSize(new Dimension(30, 300));
         GridBagLayout gb = new GridBagLayout();
         GridBagConstraints gbc = new GridBagConstraints();
         jf.setLayout(gb);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.fill = GridBagConstraints.BOTH;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.weightx = 1;
         gbc.weighty = 0;
@@ -96,6 +173,8 @@ public class AppInit {
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gb.setConstraints(keywordBtnP, gbc);
         jf.add(keywordBtnP);
+        gb.setConstraints(findTypeP, gbc);
+        jf.add(findTypeP);
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridwidth = 3;
         gb.setConstraints(logP, gbc);
@@ -103,7 +182,6 @@ public class AppInit {
         jf.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                setting.setApiPath(fileEdtTxt.getText());
                 setSetting();
                 System.exit(0);
             }
@@ -119,7 +197,6 @@ public class AppInit {
     private void outSettingPanel() {
         final JFrame settingJF = new JFrame("输出文件设置");
         settingJF.setLayout(new GridLayout(0, 2, 4, 4));
-        getSetting();//重新获取配置信息
         JCheckBox[] checkBoxes = new JCheckBox[18];
         JButton nBtn = new JButton("仅普通");
         JButton dBtn = new JButton("仅中破");
@@ -163,7 +240,6 @@ public class AppInit {
             checkBoxes[11].setSelected(false);
         });
         saveBtn.addActionListener(e -> {
-            setting.setApiPath(fileEdtTxt.getText());
             setting.setApi_boko_n(checkBoxes[0].isSelected());
             setting.setApi_boko_d(checkBoxes[1].isSelected());
             setting.setApi_kaisyu_n(checkBoxes[2].isSelected());
@@ -181,7 +257,6 @@ public class AppInit {
             setting.setApi_wedb(checkBoxes[15].isSelected());
             setting.setApi_pa(checkBoxes[16].isSelected());
             setting.setApi_pab(checkBoxes[17].isSelected());
-            setSetting();
             settingJF.dispose();
         });
         settingJF.add(new JLabel("通常立绘"));
@@ -239,6 +314,9 @@ public class AppInit {
                         } else {
                             setting.setApiPath("");
                         }
+                        break;
+                    case "findType":
+                        setting.setFindType(content[1]);
                         break;
                     case "api_boko_n":
                         setting.setApi_boko_n(Boolean.parseBoolean(content[1]));
@@ -333,6 +411,7 @@ public class AppInit {
             fos = new FileOutputStream(settingFile);
             osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
             content.append("APIFilePath=").append(setting.getApiPath());
+            content.append("\r\nfindType=").append(setting.getFindType());
             content.append("\r\napi_boko_n=").append(setting.isApi_boko_n());
             content.append("\r\napi_boko_d=").append(setting.isApi_boko_d());
             content.append("\r\napi_kaisyu_n=").append(setting.isApi_kaisyu_n());
@@ -352,7 +431,6 @@ public class AppInit {
             content.append("\r\napi_pab=").append(setting.isApi_pab());
             osw.write(content.toString());
             osw.flush();
-
         } catch (IOException e) {
             e.printStackTrace();
         } finally {

@@ -8,6 +8,7 @@ import java.util.List;
  * @date 2020/8/3 16:53
  */
 public class ShipGraph {
+    private int api_id;
     private String api_filename;
     private List<Integer> api_boko_n;
     private List<Integer> api_boko_d;
@@ -51,19 +52,13 @@ public class ShipGraph {
      * api_pab : [0,0]
      */
 
-/*    private int api_id;
+/*
 
     private int api_sortno;
     private List<String> api_version;
 */
 
- /*   public int getApi_id() {
-        return api_id;
-    }
-
-    public void setApi_id(int api_id) {
-        this.api_id = api_id;
-    }
+ /*
 
 
 
@@ -82,6 +77,14 @@ public class ShipGraph {
     public void setApi_version(List<String> api_version) {
         this.api_version = api_version;
     }*/
+    public int getApi_id() {
+        return api_id;
+    }
+
+    public void setApi_id(int api_id) {
+        this.api_id = api_id;
+    }
+
     public String getApi_filename() {
         return api_filename;
     }
@@ -229,7 +232,8 @@ public class ShipGraph {
     @Override
     public String toString() {
         return "ShipGraph{" +
-                "api_filename='" + api_filename + '\'' +
+                "api_id=" + api_id +
+                ", api_filename='" + api_filename + '\'' +
                 ", api_boko_n=" + api_boko_n +
                 ", api_boko_d=" + api_boko_d +
                 ", api_kaisyu_n=" + api_kaisyu_n +
