@@ -10,8 +10,6 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @author ArchmageTony
@@ -34,15 +32,29 @@ public class FindOutData {
         int success = 0;
         int fail = 0;
         boolean findResult;
+        if (0 == keywords.length) {
+            return;
+        }
         for (String keyword : keywords) {
             findResult = false;
             if (!keywordCheck(keyword)) {
                 MyLog.log("查找失败：" + setting.getFindType() + "： " + keyword + " 输入内容不合法，请检查拼写。", "ERROR");
+                fail++;
                 continue;
             }
             for (ShipGraph shipGraph : shipGraphs) {
                 switch (setting.getFindType()) {
-                    case "FileName":
+                    case "FileNameF":
+                        if (shipGraph.getApi_filename().substring(0, 10).equals(keyword.substring(0, 10))) {
+                            findResult = true;
+                            if (out(shipGraph).equals("成功")) {
+                                success++;
+                            } else {
+                                fail++;
+                            }
+                        }
+                        break;
+                    case "FileNameE":
                         if (shipGraph.getApi_filename().equals(keyword)) {
                             findResult = true;
                             if (out(shipGraph).equals("成功")) {
@@ -69,10 +81,9 @@ public class FindOutData {
                 MyLog.log("查找失败：" + setting.getFindType() + "： " + keyword + " 未查找到，请检查拼写。", "ERROR");
             }
         }
-        MyLog.log("生成坐标文件完成：请检查程序所在目录的 output 文件夹", "BOLD");
-        MyLog.log("成功文件数：" + success + "    失败文件数：" + fail, "BOLD");
-        //        MyLog.log("-------------------------------------------------------------------------------------------------------", "BOLD");
-        MyLog.log("-".repeat(MyLog.logEdtTxt.getWidth() / 8), "BOLD");
+//        MyLog.log("生成坐标文件完成：请检查程序所在目录的 output 文件夹", "BOLD");
+        MyLog.log("成功：" + success + "    失败：" + fail + "    请检查程序所在目录的 output 文件夹", "BOLD");
+        MyLog.log("", "SPLIT");
     }
 
     /**
@@ -85,10 +96,23 @@ public class FindOutData {
         if (keyword.equals("")) {
             return false;
         }
-        if (setting.getFindType().equals("ID")) {
+        try {
+            if (setting.getFindType().equals("FileNameF")) {
+                String substring = keyword.substring(0, 10);
+            }
+            if (setting.getFindType().equals("FileNameE")) {
+                String substring = keyword.substring(0, 12);
+            }
+            if (setting.getFindType().equals("ID")) {
+                int i = Integer.parseInt(keyword);
+            }
+        } catch (Exception e) {
+            return false;
+        }
+/*        if (setting.getFindType().equals("ID")) {
             Matcher mer = Pattern.compile("^[0-9]+$").matcher(keyword);
             return mer.find();
-        }
+        }*/
         return true;
     }
 
@@ -107,7 +131,7 @@ public class FindOutData {
         boolean mkdir = filepath.mkdir();
         file = new File(App.USER_DIR + File.separator + "output" + File.separator + shipGraph.getApi_filename() + ".config.ini");
         if (file.exists()) {
-            MyLog.log("输出失败：文件 " + shipGraph.getApi_filename() + " 已经存在，无法创建。", "ERROR");
+            MyLog.log("输出失败：ID：" + shipGraph.getApi_id() + "  FileName：" + shipGraph.getApi_filename() + " 已经存在，无法创建。", "ERROR");
             return "失败";
         }
         try {
@@ -253,7 +277,7 @@ public class FindOutData {
                 e.printStackTrace();
             }
         }
-//        MyLog.log("输出成功：文件 " + shipGraph.getApi_filename() + " 已成功输出");
+        MyLog.log("输出成功：ID：" + shipGraph.getApi_id() + "  FileName：" + shipGraph.getApi_filename() + " 已成功输出");
         return "成功";
     }
 }

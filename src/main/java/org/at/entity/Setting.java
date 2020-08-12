@@ -8,7 +8,8 @@ package org.at.entity;
 
 public class Setting {
     private String apiPath;//api文件地址
-    private String findType;//查找立绘方式 1：按照名称查找  2：按照ID查找
+    //查找立绘方式 FileNameF：FileNameFuzzy以filename模糊查找   FileNameE：FileNameExact以filename精确查找    ID：以ID查找
+    private String findType;
     private boolean api_boko_n;
     private boolean api_boko_d;
     private boolean api_kaisyu_n;
