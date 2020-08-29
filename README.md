@@ -11,18 +11,18 @@ GitHub项目地址：[https://github.com/ArchmageTony/KanColleCoordinatesMaker_v
 **解压密码：crowsong.xyz**  
 你可以直接从[release](https://github.com/ArchmageTony/KanColleCoordinatesMaker_v2/releases )页面下载程序`KanColleCoordinatesMaker_v2.jar`与运行环境`KCCM Runtime.rar`。  
 诚通网盘下载方式 **（解压密码：crowsong.xyz）**：  
-- 程序：[KanColleCoordinatesMaker_v2.jar（诚通网盘）](https://t00y.com/file/2276132-456748015 "解压密码：crowsong.xyz")  
+- 程序：[KanColleCoordinatesMaker_v2.jar（诚通网盘）](https://t00y.com/file/2276132-459236767 "解压密码：crowsong.xyz")  
 - 运行环境：[KCCM Runtime.rar（诚通网盘）](https://t00y.com/file/2276132-456384453 "解压密码：crowsong.xyz")  
 
 ## 三、解析数据(api_start2)准备
 本程序可以解析从getData返回`api_start2`数据的`UTF-8`编码方式的TXT或者JSON文件，也可以解析Tibowl大佬解析整理过的`start2.json`和`api_mst_shipgraph.json`文件（[项目地址](https://github.com/Tibowl/api_start2  )）。  
 下面将会讲述如何获取到`api_start2`数据文件  
-- 1、自行下载getData数据：以chrome为例，按`F12`打开开发者工具，选择`Network`标签，打开舰娘游戏并点击`GAME START`进入游戏，进入到主港后，在开发者工具里面搜索`getData`，单击下面的`getData`，在右侧选择`Response`标签卡，将里面的内容全部复制下来，保存成`UTF-8`格式的TXT或JSON即可。  
-![image](https://www.crowsong.xyz/wp-content/uploads/2020/04/2020080709371744.png )  
-- 2、从Tibowl大佬那里下载整理过的`start2.json`文件：先访问[https://github.com/Tibowl/api_start2](https://github.com/Tibowl/api_start2  )，单击`start2.json`之后在右上角找到`Download`即可，若你点击后没有进入下载而是仅仅进入到了文本当中，直接右键另存为即可。  
+- 1、从Tibowl大佬那里下载整理过的`start2.json`文件（推荐）：先访问[https://github.com/Tibowl/api_start2](https://github.com/Tibowl/api_start2  )，单击`start2.json`之后在右上角找到`Download`即可，若你点击后没有进入下载而是仅仅进入到了文本当中，直接鼠标右键另存为或者Ctrl+S保存即可。  
 ![image](https://www.crowsong.xyz/wp-content/uploads/2020/04/2020080709414383.png )  
-- 3、`api_mst_shipgraph.json`文件同理，在`parsed`文件夹中找到后选择右上角`Raw`按钮，进入到文本后直接右键另存为即可。  
+- 2、`api_mst_shipgraph.json`文件同理，在`parsed`文件夹中找到后选择右上角`Raw`按钮，进入到文本后直接鼠标右键另存为或者Ctrl+S保存即可。  
 ![image](https://www.crowsong.xyz/wp-content/uploads/2020/04/2020080709414468.png )  
+- 3、自行下载getData数据：以chrome为例，按`F12`打开开发者工具，选择`Network`标签，打开舰娘游戏并点击`GAME START`进入游戏，进入到主港后，在开发者工具里面搜索`getData`，单击下面的`getData`，在右侧选择`Response`标签卡，将里面的内容全部复制下来，保存成`UTF-8`格式的TXT或JSON即可。  
+![image](https://www.crowsong.xyz/wp-content/uploads/2020/04/2020080709371744.png )  
 
 ## 四、程序使用
 ![image](https://www.crowsong.xyz/wp-content/uploads/2020/04/2020081208425860.png )  
@@ -37,7 +37,7 @@ GitHub项目地址：[https://github.com/ArchmageTony/KanColleCoordinatesMaker_v
 - 5、输入需要搜索的内容，多个以英文逗号隔开，点击生成即可。你可以在输出文件设置当中，设置只输出哪些键值，设置完后记得点保存按钮！未勾中的内容只会输出键值，但不会输出数值，岛风go与acgpower不会读取没有数值的内容。输出出来的文件在程序所在目录的output文件夹中。  
 `.config.ini`文件的使用请自行参考各自代理软件的存放方式。  
 ## 五、其它说明与问题
-- 1、还是这个问题，期间限定立绘的文件名可能会与普通立绘的文件名不同，请注意区分。这个非常的混乱，比如2018年10月万圣节朝潮的立绘文件名称与普通立绘文件名不同，但是2019年10月的万圣节却又相同，这导致提取历史性的期间限定立绘非常的混乱，如果有可能的话尽量使用模糊查找或者按ID查找从而减少不必要的工作量。  
+- 1、还是这个问题，期间限定立绘的文件名可能会与普通立绘的文件名不同，请注意区分。这个非常的混乱，比如2018年10月万圣节朝潮的立绘文件名称与普通立绘文件名不同，但是2019年10月的万圣节却又相同，这导致提取旧的期间限定立绘非常的混乱，如果有可能的话尽量使用模糊查找或者按ID查找从而减少不必要的工作量。  
 - 2、岛风go与acgpower目前均不支持`api_pa`和`api_pab`特殊攻击立绘的坐标修改，但是为了防止以后增加这个功能我就先都给写上了。  
 - 3、解析采用的是gson框架，一般来说除非`api_start2`的数据结构上有非常大的修改，否则不会影响到提取的，增加的键值不会被读取，减少的键值会被读取为空后输出。  
 - 4、如果手动保存`getData`的数据记得最好选用`UTF-8`的编码方式保存，格式选择TXT或者JSON。  

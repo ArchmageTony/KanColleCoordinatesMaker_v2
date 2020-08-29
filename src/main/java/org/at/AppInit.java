@@ -1,5 +1,6 @@
 package org.at;
 
+import org.apache.log4j.Logger;
 import org.at.entity.Setting;
 import org.at.entity.ShipGraph;
 import org.at.tool.MyLog;
@@ -18,6 +19,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Properties;
 
 
 /**
@@ -26,8 +28,8 @@ import java.util.Enumeration;
  * @date 2020/8/5 9:41
  */
 public class AppInit {
-
-    private final JFrame jf = new JFrame("KanColle Coordinates Maker v2 by ArchmageTony");
+    private static final Logger logger = Logger.getLogger(AppInit.class);
+    private final JFrame jf = new JFrame("KanColle Coordinates Maker v2 by ArchmageTony        v" + getAppVersion());
     private final Setting setting = new Setting("", "FileNameF", true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true);
     private JTextField fileEdtTxt, keywordEdtTxt;
     private JRadioButton findTypeRdoBtn1, findTypeRdoBtn2, findTypeRdoBtn3;
@@ -179,7 +181,7 @@ public class AppInit {
         gbc.gridwidth = 3;
         gb.setConstraints(logP, gbc);
         jf.add(logP);
-        Image jfIcon = Toolkit.getDefaultToolkit().createImage(App.class.getResource("/icon.png"));
+        Image jfIcon = Toolkit.getDefaultToolkit().createImage(App.class.getClassLoader().getResource("icon.png"));
         jf.setIconImage(jfIcon);
         jf.addWindowListener(new WindowAdapter() {
             @Override
@@ -287,9 +289,6 @@ public class AppInit {
      * 获取配置文件中的设置参数
      */
     private void getSetting() {
-        FileInputStream fis = null;
-        InputStreamReader isr = null;
-        BufferedReader br = null;
         File settingFile = new File(App.KCCM_SETTING);
         String line;
         String[] content;
@@ -297,10 +296,11 @@ public class AppInit {
             setSetting();
             return;
         }
-        try {
-            fis = new FileInputStream(settingFile);
-            isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
-            br = new BufferedReader(isr);
+        try (
+                FileInputStream fis = new FileInputStream(settingFile);
+                InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
+                BufferedReader br = new BufferedReader(isr)
+        ) {
             while (null != (line = br.readLine())) {
                 content = line.split("=");
                 switch (content[0]) {
@@ -367,22 +367,9 @@ public class AppInit {
                         break;
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (fis != null) {
-                    fis.close();
-                }
-                if (isr != null) {
-                    isr.close();
-                }
-                if (br != null) {
-                    br.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        } catch (Exception e) {
+            MyLog.log("初始失败：设置文件IO异常", "ERROR");
+            logger.error("初始失败：设置文件IO异常", e);
         }
     }
 
@@ -390,8 +377,6 @@ public class AppInit {
      * 将设置参数写入配置文件
      */
     private void setSetting() {
-        FileOutputStream fos = null;
-        OutputStreamWriter osw = null;
         StringBuilder content = new StringBuilder();
         File settingFile = new File(App.KCCM_SETTING);
         if (!settingFile.exists()) {
@@ -399,13 +384,14 @@ public class AppInit {
                 boolean settingFileNewFile = settingFile.createNewFile();
             } catch (IOException e) {
                 MyLog.log("创建设置文件失败！", "ERROR", jf);
-                e.printStackTrace();
+                logger.error("创建设置文件失败！", e);
                 return;
             }
         }
-        try {
-            fos = new FileOutputStream(settingFile);
-            osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
+        try (
+                FileOutputStream fos = new FileOutputStream(settingFile);
+                OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8)
+        ) {
             content.append("APIFilePath=").append(setting.getApiPath());
             content.append("\r\nfindType=").append(setting.getFindType());
             content.append("\r\napi_boko_n=").append(setting.isApi_boko_n());
@@ -428,18 +414,8 @@ public class AppInit {
             osw.write(content.toString());
             osw.flush();
         } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (fos != null) {
-                    fos.close();
-                }
-                if (osw != null) {
-                    osw.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            MyLog.log("保存设置失败！", "ERROR", jf);
+            logger.error("保存设置失败！", e);
         }
     }
 
@@ -510,4 +486,25 @@ public class AppInit {
         FindOutData fod = new FindOutData();
         fod.find(keyword.split(","), shipGraphs, setting);
     }
+
+    /**
+     * 获得pom.xml当中程序的版本号
+     *
+     * @return 程序的版本号
+     */
+    public String getAppVersion() {
+        String appVersion = null;
+        Properties properties = new Properties();
+        try {
+            properties.load(App.class.getClassLoader().getResourceAsStream("app.properties"));
+            if (!properties.isEmpty()) {
+                appVersion = properties.getProperty("app.version");
+            }
+        } catch (IOException e) {
+            MyLog.log("版本号获取失败！", "ERROR");
+            logger.error("版本号获取失败！", e);
+        }
+        return appVersion;
+    }
 }
+

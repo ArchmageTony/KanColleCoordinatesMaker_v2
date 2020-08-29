@@ -1,5 +1,6 @@
 package org.at;
 
+import org.apache.log4j.Logger;
 import org.at.entity.Setting;
 import org.at.entity.ShipGraph;
 import org.at.tool.MyLog;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
  * @date 2020/8/4 13:54
  */
 public class FindOutData {
-
+    private static final Logger logger = Logger.getLogger(FindOutData.class);
     private Setting setting;
 
     /**
@@ -123,8 +124,6 @@ public class FindOutData {
      * @return 输出信息
      */
     private String out(ShipGraph shipGraph) {
-        FileOutputStream fos = null;
-        OutputStreamWriter osw = null;
         File file;
         File filepath = new File(App.USER_DIR + File.separator + "output");
         StringBuilder content = new StringBuilder();
@@ -134,10 +133,11 @@ public class FindOutData {
             MyLog.log("输出失败：ID：" + shipGraph.getApi_id() + "  FileName：" + shipGraph.getApi_filename() + " 已经存在，无法创建。", "ERROR");
             return "失败";
         }
-        try {
+        try (
+                FileOutputStream fos = new FileOutputStream(file);
+                OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8)
+        ) {
             boolean newFile = file.createNewFile();
-            fos = new FileOutputStream(file);
-            osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
             //输出文件内容
             content.append("[graph]");
             if (setting.isApi_boko_n() && null != shipGraph.getApi_boko_n()) {
@@ -262,20 +262,9 @@ public class FindOutData {
             osw.write(content.toString());
             osw.flush();
         } catch (IOException e) {
-            e.printStackTrace();
             MyLog.log("输出失败：输出文件失败，IO异常", "ERROR");
+            logger.error("输出失败：输出文件失败，IO异常", e);
             return "失败";
-        } finally {
-            try {
-                if (fos != null) {
-                    fos.close();
-                }
-                if (osw != null) {
-                    osw.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
         MyLog.log("输出成功：ID：" + shipGraph.getApi_id() + "  FileName：" + shipGraph.getApi_filename() + " 已成功输出");
         return "成功";
