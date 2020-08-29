@@ -116,3 +116,4 @@ api
 output
 KCCM Setting.ini
 /src/test/
+/logs

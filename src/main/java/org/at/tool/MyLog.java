@@ -1,5 +1,7 @@
 package org.at.tool;
 
+import org.apache.log4j.Logger;
+
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
@@ -12,10 +14,11 @@ import java.awt.*;
  * @version 1.0
  */
 public class MyLog {
-    public final static JTextPane logEdtTxt = new JTextPane();
-    static SimpleAttributeSet infoSet = new SimpleAttributeSet();
-    static SimpleAttributeSet errorSet = new SimpleAttributeSet();
-    static SimpleAttributeSet boldSet = new SimpleAttributeSet();
+    public static final JTextPane logEdtTxt = new JTextPane();
+    private static final Logger logger = Logger.getLogger(MyLog.class);
+    private static final SimpleAttributeSet infoSet = new SimpleAttributeSet();
+    private static final SimpleAttributeSet errorSet = new SimpleAttributeSet();
+    private static final SimpleAttributeSet boldSet = new SimpleAttributeSet();
 
     static {
         StyleConstants.setFontSize(infoSet, 14);
@@ -30,7 +33,7 @@ public class MyLog {
         try {
             doc.insertString(doc.getLength(), content + "\n\n", infoSet);
         } catch (BadLocationException e) {
-            e.printStackTrace();
+            logger.error("JTextPane写入失败", e);
         }
     }
 
@@ -52,7 +55,7 @@ public class MyLog {
                     break;
             }
         } catch (BadLocationException e) {
-            e.printStackTrace();
+            logger.error("JTextPane写入失败", e);
         }
     }
 
@@ -74,7 +77,7 @@ public class MyLog {
                     break;
             }
         } catch (BadLocationException e) {
-            e.printStackTrace();
+            logger.error("JTextPane写入失败", e);
         }
     }
 }
